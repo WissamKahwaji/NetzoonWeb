@@ -10,7 +10,7 @@ const getRealEstateList = async (country: string) => {
 };
 
 const getRealEstateById = async (id: string) => {
-  const res = await publicInstance.get<RealEstateModel[]>(
+  const res = await publicInstance.get<RealEstateModel>(
     API_ROUTES.REAL_ESTATE.GET_BY_ID(id)
   );
   return res.data;
