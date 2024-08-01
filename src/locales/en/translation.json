@@ -175,6 +175,10 @@
     "weight_in_kg":"Weight in Kg",
     "color":"Color",
     "made_in":"Made In",
-    "quantity":"Quantity"
+    "quantity":"Quantity",
+    "seller":"seller",
+    "previous_price":"previous price",
+    "current_price":"current price"
+    
 
 }

@@ -15,14 +15,15 @@ const DealCard = ({ item }: DealCardProps) => {
         <div className="w-full flex flex-col justify-center items-start space-y-2 text-sm">
           <p className="  font-semibold">{item.name}</p>
           <p className="">
-            Seller : <span className="text-primary">{item.companyName}</span>
+            {t("seller")} :{" "}
+            <span className="text-primary">{item.companyName}</span>
           </p>
           <p>
-            Previous Price :{" "}
+            {t("previous_price")} :{" "}
             <span className="text-primary">{item.prevPrice}</span>
           </p>
           <p>
-            Current Price :{" "}
+            {t("current_price")} :{" "}
             <span className="text-primary">{item.currentPrice}</span>
           </p>
         </div>
@@ -30,6 +31,7 @@ const DealCard = ({ item }: DealCardProps) => {
           src={item.imgUrl}
           alt="deal img"
           className="w-full h-[150px] md:h-[160px] xl:h-[170px] object-cover rounded-lg"
+          crossOrigin="anonymous"
         />
       </div>
       <div className="flex justify-center items-center w-full px-2 my-2">

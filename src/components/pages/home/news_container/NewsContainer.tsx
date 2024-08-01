@@ -88,7 +88,7 @@ const NewsContainer = () => {
               {newsInfo.map((item, index) => (
                 <div key={index} className="px-2 py-12">
                   <div
-                    className="cursor-pointer relative w-full md:w-[700px] h-[210px] rounded-lg shadow-lg border border-primary flex flex-col justify-start items-start bg-white transition-transform transform hover:scale-105 duration-300"
+                    className="cursor-pointer relative w-full md:w-[400px] h-[210px] rounded-lg shadow-lg border border-primary flex flex-col justify-start items-start bg-white transition-transform transform hover:scale-105 duration-300"
                     onClick={() => navigate(`/news/${item._id}`)}
                   >
                     <img
@@ -129,7 +129,7 @@ const NewsContainer = () => {
                 {newsInfo.map((item, index) => (
                   <div key={index} className="px-2 py-12">
                     <div
-                      className="cursor-pointer relative w-full md:w-[700px] h-[210px] rounded-lg shadow-lg border border-primary flex flex-col justify-start items-start bg-white transition-transform transform hover:scale-105 duration-300"
+                      className="cursor-pointer relative w-full md:w-[400px] h-[210px] rounded-lg shadow-lg border border-primary flex flex-col justify-start items-start bg-white transition-transform transform hover:scale-105 duration-300"
                       onClick={() => navigate(`/news/${item._id}`)}
                     >
                       <img
@@ -155,7 +155,7 @@ const NewsContainer = () => {
                 {newsInfo.map((item, index) => (
                   <div key={index} className="px-2 py-12">
                     <div
-                      className="cursor-pointer relative w-full md:w-[700px] h-[210px] rounded-lg shadow-lg border border-primary flex flex-col justify-start items-start bg-white transition-transform transform hover:scale-105 duration-300"
+                      className="cursor-pointer relative w-full md:w-[400px] h-[210px] rounded-lg shadow-lg border border-primary flex flex-col justify-start items-start bg-white transition-transform transform hover:scale-105 duration-300"
                       onClick={() => navigate(`/news/${item._id}`)}
                     >
                       <img

@@ -172,5 +172,8 @@
     "color":"اللون",
     "address":"العنوان",
     "made_in":"بلد الصنع",
-    "quantity":"الكمية"
+    "quantity":"الكمية",
+    "seller":"اسم البائع",
+    "previous_price":"السعر قبل",
+    "current_price":"السعر بعد"
 }
