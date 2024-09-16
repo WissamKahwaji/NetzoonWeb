@@ -7,12 +7,20 @@ interface CartValue extends ProductModel {
   count: number;
 }
 
+interface DeliveryDetails {
+  shippingAddress: string;
+  mobile: string;
+  country: string;
+  city: string;
+}
+
 export interface InitialState {
   cartValues: CartValue[];
   totalQuantity: number;
   totalWeight: number;
   orderTotal: number;
   deliveryFee: number;
+  deliveryDetails: DeliveryDetails;
 }
 
 const getPersistedCartValues = () => {
@@ -137,10 +145,20 @@ const cartSlice = createSlice({
 
       saveStateToLocalStorage(state);
     },
+    clearCart: state => {
+      state.cartValues = [];
+      state.totalQuantity = 0;
+      state.totalWeight = 0;
+      state.orderTotal = 0;
+      saveStateToLocalStorage(state);
+    },
     setDeliveyFee: (state, action: PayloadAction<number>) => {
       state.deliveryFee = action.payload;
 
       saveStateToLocalStorage(state);
+    },
+    setDeliveryDetails: (state, action: PayloadAction<DeliveryDetails>) => {
+      state.deliveryDetails = action.payload;
     },
   },
 });
@@ -155,6 +173,8 @@ export const selectOrderTotal = (state: RootState) =>
   state.cartReducer.orderTotal;
 export const selectDeliveryFee = (state: RootState) =>
   state.cartReducer.deliveryFee;
+export const selectDeliveryDetails = (state: RootState) =>
+  state.cartReducer.deliveryDetails;
 
 export const {
   addToCart,
@@ -162,5 +182,7 @@ export const {
   decreaseCount,
   deleteFromCart,
   setDeliveyFee,
+  clearCart,
+  setDeliveryDetails,
 } = cartSlice.actions;
 export default cartSlice.reducer;

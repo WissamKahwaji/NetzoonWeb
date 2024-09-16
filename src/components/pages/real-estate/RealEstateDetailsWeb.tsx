@@ -6,7 +6,11 @@ import { getCurrencyFromCountry } from "../../../utils";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-
+import Modal from "react-modal";
+import { MdDelete, MdEdit } from "react-icons/md";
+import { useDeleteRealEstateMutation } from "../../../apis/real_estate/queries";
+import { Link, useNavigate } from "react-router-dom";
+import { useState } from "react";
 interface RealEstateDetailsWebProps {
   realEstateInfo: RealEstateModel | undefined;
 }
@@ -16,6 +20,19 @@ const RealEstateDetailsWeb = ({
 }: RealEstateDetailsWebProps) => {
   const { t } = useTranslation();
   const { country } = useCountry();
+  const navigate = useNavigate();
+  const userId = localStorage.getItem("userId");
+
+  const { mutate: deleteRealEstateInfo } = useDeleteRealEstateMutation();
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
+
+  const handleDeleteRealEstate = () => {
+    deleteRealEstateInfo(realEstateInfo?._id ?? "");
+  };
+
   const settings = {
     dots: false,
     infinite: false,
@@ -86,7 +103,24 @@ const RealEstateDetailsWeb = ({
           className="w-full h-[340px] shadow-md object-contain"
         />
         <div className="flex flex-col justify-start items-start space-y-5">
-          <p className="text-2xl font-body">{realEstateInfo?.title}</p>
+          <div className="w-full flex flex-row justify-between items-center">
+            <p className="text-2xl font-body">{realEstateInfo?.title}</p>
+            {userId === realEstateInfo?.createdBy?._id && (
+              <div className="flex flex-row justify-center items-center gap-x-6">
+                <MdEdit
+                  className="text-primary w-6 h-6 cursor-pointer"
+                  onClick={() => {
+                    navigate("edit");
+                  }}
+                />
+
+                <MdDelete
+                  className="text-red-500 w-6 h-6 cursor-pointer"
+                  onClick={openModal}
+                />
+              </div>
+            )}
+          </div>
           <div className="w-full flex flex-row justify-between items-center">
             {realEstateInfo?.price && (
               <p className="text-lg text-primary font-semibold">
@@ -103,9 +137,14 @@ const RealEstateDetailsWeb = ({
           <p>{realEstateInfo?.description}</p>
 
           <div className="w-full justify-center items-center mx-auto flex flex-row gap-x-3">
-            <button className="w-full mx-auto bg-primary text-white py-2 rounded-full shadow-sm  ">
-              {t("call")}
-            </button>
+            <Link
+              to={`tel:${realEstateInfo?.createdBy.firstMobile}`}
+              className="w-full"
+            >
+              <button className="w-full mx-auto bg-primary text-white py-2 rounded-full shadow-sm  ">
+                {t("call")}
+              </button>
+            </Link>
             <button className="w-full mx-auto bg-primary text-white py-2 rounded-full shadow-sm  ">
               {t("chat")}
             </button>
@@ -185,6 +224,35 @@ const RealEstateDetailsWeb = ({
           )}
         </div>
       </div>
+      <Modal
+        isOpen={isModalOpen}
+        onRequestClose={closeModal}
+        contentLabel="Confirm Delete"
+        className="fixed inset-0 flex items-center justify-center z-50"
+        overlayClassName="fixed inset-0 bg-black bg-opacity-50"
+      >
+        <div className="bg-white p-6 rounded-lg shadow-lg max-w-sm w-full">
+          <h2 className="text-lg font-bold mb-4">{t("delete_real_esate")}</h2>
+          <p className="mb-4">{t("delete_real_esate_warning")}</p>
+          <div className="flex justify-end gap-4">
+            <button
+              onClick={closeModal}
+              className="px-4 py-2 bg-gray-300 rounded-md"
+            >
+              {t("no")}
+            </button>
+            <button
+              onClick={() => {
+                handleDeleteRealEstate();
+                closeModal();
+              }}
+              className="px-4 py-2 bg-red-600 text-white rounded-md"
+            >
+              {t("yes")}
+            </button>
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 };

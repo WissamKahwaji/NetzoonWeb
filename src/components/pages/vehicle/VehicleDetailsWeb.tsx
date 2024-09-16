@@ -6,6 +6,11 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { getCurrencyFromCountry } from "../../../utils";
 import { IoShareSocialSharp } from "react-icons/io5";
+import { Link, useNavigate } from "react-router-dom";
+import { useDeleteVehicleMutation } from "../../../apis/vehicle/queries";
+import { useState } from "react";
+import { MdDelete, MdEdit } from "react-icons/md";
+import Modal from "react-modal";
 
 interface VehicleDetailsWebProps {
   vehicleInfo: VehicleModel | undefined;
@@ -14,6 +19,19 @@ interface VehicleDetailsWebProps {
 const VehicleDetailsWeb = ({ vehicleInfo }: VehicleDetailsWebProps) => {
   const { t } = useTranslation();
   const { country } = useCountry();
+  const navigate = useNavigate();
+  const userId = localStorage.getItem("userId");
+
+  const { mutate: deleteVehicleInfo } = useDeleteVehicleMutation();
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
+
+  const handleDeleteVehicle = () => {
+    deleteVehicleInfo(vehicleInfo?._id ?? "");
+  };
+
   const settings = {
     dots: false,
     infinite: false,
@@ -84,7 +102,24 @@ const VehicleDetailsWeb = ({ vehicleInfo }: VehicleDetailsWebProps) => {
           className="w-full h-[340px] shadow-md object-contain"
         />
         <div className="flex flex-col justify-start items-start space-y-5">
-          <p className="text-2xl font-body">{vehicleInfo?.name}</p>
+          <div className="w-full flex flex-row justify-between items-center">
+            <p className="text-2xl font-body">{vehicleInfo?.name}</p>
+            {userId === vehicleInfo?.creator?._id && (
+              <div className="flex flex-row justify-center items-center gap-x-6">
+                <MdEdit
+                  className="text-primary w-6 h-6 cursor-pointer"
+                  onClick={() => {
+                    navigate("edit");
+                  }}
+                />
+
+                <MdDelete
+                  className="text-red-500 w-6 h-6 cursor-pointer"
+                  onClick={openModal}
+                />
+              </div>
+            )}
+          </div>
           <div className="w-full flex flex-row justify-between items-center">
             {vehicleInfo?.price && (
               <p className="text-lg text-primary font-semibold">
@@ -101,13 +136,26 @@ const VehicleDetailsWeb = ({ vehicleInfo }: VehicleDetailsWebProps) => {
           <p>{vehicleInfo?.description}</p>
 
           <div className="w-full justify-center items-center mx-auto flex flex-row gap-x-3">
-            <button className="w-full mx-auto bg-primary text-white py-2 rounded-full shadow-sm  ">
-              {t("call")}
-            </button>
+            <Link to={`tel:${vehicleInfo?.contactNumber}`} className="w-full">
+              <button className="w-full mx-auto bg-primary text-white py-2 rounded-full shadow-sm  ">
+                {t("call")}
+              </button>
+            </Link>
             <button className="w-full mx-auto bg-primary text-white py-2 rounded-full shadow-sm  ">
               {t("chat")}
             </button>
-            <button className="w-full mx-auto bg-primary text-white py-2 rounded-full shadow-sm  ">
+            <button
+              className="w-full mx-auto bg-primary text-white py-2 rounded-full shadow-sm  "
+              onClick={() => {
+                if (vehicleInfo?.contactNumber) {
+                  const sanitizedNumber = vehicleInfo?.contactNumber.replace(
+                    /\s+/g,
+                    ""
+                  );
+                  window.open(`https://wa.me/${sanitizedNumber}`, "_blank");
+                }
+              }}
+            >
               {t("whatsapp")}
             </button>
           </div>
@@ -331,6 +379,35 @@ const VehicleDetailsWeb = ({ vehicleInfo }: VehicleDetailsWebProps) => {
           )}
         </div>
       </div>
+      <Modal
+        isOpen={isModalOpen}
+        onRequestClose={closeModal}
+        contentLabel="Confirm Delete"
+        className="fixed inset-0 flex items-center justify-center z-50"
+        overlayClassName="fixed inset-0 bg-black bg-opacity-50"
+      >
+        <div className="bg-white p-6 rounded-lg shadow-lg max-w-sm w-full">
+          <h2 className="text-lg font-bold mb-4">{t("delete_vehicle")}</h2>
+          <p className="mb-4">{t("delete_vehicle_warning")}</p>
+          <div className="flex justify-end gap-4">
+            <button
+              onClick={closeModal}
+              className="px-4 py-2 bg-gray-300 rounded-md"
+            >
+              {t("no")}
+            </button>
+            <button
+              onClick={() => {
+                handleDeleteVehicle();
+                closeModal();
+              }}
+              className="px-4 py-2 bg-red-600 text-white rounded-md"
+            >
+              {t("yes")}
+            </button>
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 };

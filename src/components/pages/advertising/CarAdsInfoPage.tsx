@@ -6,6 +6,11 @@ import { useTranslation } from "react-i18next";
 import { useCountry } from "../../../context/CountryContext";
 import { getCurrencyFromCountry } from "../../../utils";
 import { IoShareSocialSharp } from "react-icons/io5";
+import { useNavigate } from "react-router-dom";
+import { useDeleteAdsMutation } from "../../../apis/ads/queries";
+import { useState } from "react";
+import { MdDelete, MdEdit } from "react-icons/md";
+import Modal from "react-modal";
 
 interface CarAdsInfoPageProps {
   adsInfo: AdsModel;
@@ -14,6 +19,19 @@ interface CarAdsInfoPageProps {
 const CarAdsInfoPage = ({ adsInfo }: CarAdsInfoPageProps) => {
   const { t } = useTranslation();
   const { country } = useCountry();
+  const navigate = useNavigate();
+  const userId = localStorage.getItem("userId");
+
+  const { mutate: deleteAdvInfo } = useDeleteAdsMutation();
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
+
+  const handleDeleteAdv = () => {
+    deleteAdvInfo(adsInfo?._id ?? "");
+  };
+
   const settings = {
     dots: false,
     infinite: false,
@@ -98,7 +116,22 @@ const CarAdsInfoPage = ({ adsInfo }: CarAdsInfoPageProps) => {
           </p>
         )}
         <div className="flex flex-row justify-start items-center gap-x-4">
-          <IoShareSocialSharp className="w-5 h-5 text-primary" />
+          <IoShareSocialSharp className="w-7 h-7 text-primary" />
+          {userId === adsInfo.owner?._id && (
+            <div className="flex flex-row justify-center items-center gap-x-4 w-full">
+              <MdEdit
+                className="text-primary w-6 h-6 cursor-pointer"
+                onClick={() => {
+                  navigate("edit");
+                }}
+              />
+
+              <MdDelete
+                className="text-red-500 w-6 h-6 cursor-pointer"
+                onClick={openModal}
+              />
+            </div>
+          )}
         </div>
       </div>
       <p className="text-lg font-body font-semibold">
@@ -199,6 +232,35 @@ const CarAdsInfoPage = ({ adsInfo }: CarAdsInfoPageProps) => {
           </div>
         )}
       </div>
+      <Modal
+        isOpen={isModalOpen}
+        onRequestClose={closeModal}
+        contentLabel="Confirm Delete"
+        className="fixed inset-0 flex items-center justify-center z-50"
+        overlayClassName="fixed inset-0 bg-black bg-opacity-50"
+      >
+        <div className="bg-white p-6 rounded-lg shadow-lg max-w-sm w-full">
+          <h2 className="text-lg font-bold mb-4">{t("delete_adv")}</h2>
+          <p className="mb-4">{t("delete_adv_warning")}</p>
+          <div className="flex justify-end gap-4">
+            <button
+              onClick={closeModal}
+              className="px-4 py-2 bg-gray-300 rounded-md"
+            >
+              {t("no")}
+            </button>
+            <button
+              onClick={() => {
+                handleDeleteAdv();
+                closeModal();
+              }}
+              className="px-4 py-2 bg-red-600 text-white rounded-md"
+            >
+              {t("yes")}
+            </button>
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 };

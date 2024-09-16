@@ -92,7 +92,7 @@ const CartMobileView = ({ serviceFee }: CartMobileViewProps) => {
                 >
                   <MdDelete className="text-lg" />
                 </button>
-                <div className="flex items-center space-x-2">
+                <div className="flex items-center gap-x-2">
                   <button
                     onClick={() => handleDecrease(item._id ?? "")}
                     className="text-primary"

@@ -49,6 +49,7 @@ const SignUpPage = () => {
       .oneOf([Yup.ref("password"), ""], "Passwords must match")
       .required("Please confirm your password"),
     firstMobile: Yup.string()
+      .required("Please enter a mobile number")
       .matches(/^\+?\d+$/, "Invalid mobile number")
       .min(9, "Mobile number must be at least 9 characters long"),
 
@@ -431,7 +432,7 @@ const SignUpPage = () => {
                 <label className="text-xs font-header">
                   {t("delivery_type")}
                 </label>
-                <div className="flex flex-row justify-start items-center space-x-5 w-full mt-3">
+                <div className="flex flex-row justify-start items-center gap-x-5 w-full mt-3">
                   <div className="flex items-center">
                     <Field
                       type="radio"
@@ -608,7 +609,7 @@ const SignUpPage = () => {
                 <label className="text-xs font-header">
                   {t("location_type")}
                 </label>
-                <div className="flex flex-row justify-start items-center space-x-5 w-full mt-3">
+                <div className="flex flex-row justify-start items-center gap-x-5 w-full mt-3">
                   <div className="flex items-center">
                     <Field
                       type="radio"

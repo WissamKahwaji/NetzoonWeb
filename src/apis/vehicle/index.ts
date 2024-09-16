@@ -1,6 +1,7 @@
 import API_ROUTES from "../../constants/apiRoutes";
+import { createFormData } from "../../utils";
 import publicInstance from "../publicInstance";
-import { VehicleModel } from "./type";
+import { VehicleInputModel, VehicleModel } from "./type";
 
 const getLatestCarsByCreator = async (country: string) => {
   const res = await publicInstance.get<{
@@ -40,10 +41,31 @@ const getCompaniesVehicles = async (id: string) => {
   return res.data;
 };
 
+const addVehicle = async (payload: VehicleInputModel) => {
+  const data = createFormData(payload);
+  const res = await publicInstance.post(API_ROUTES.VEHICLE.ADD, data);
+  return res.data;
+};
+const editVehicle = async (payload: VehicleInputModel) => {
+  const data = createFormData(payload);
+  const res = await publicInstance.put(
+    API_ROUTES.VEHICLE.EDIT(payload._id!),
+    data
+  );
+  return res.data;
+};
+const deleteVehicle = async (id: string) => {
+  const res = await publicInstance.delete(API_ROUTES.VEHICLE.DELETE(id));
+  return res.data;
+};
+
 export {
   getLatestCarsByCreator,
   getAllPlanes,
   getAllCars,
   getVehicleById,
   getCompaniesVehicles,
+  addVehicle,
+  editVehicle,
+  deleteVehicle,
 };

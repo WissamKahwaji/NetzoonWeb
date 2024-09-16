@@ -1,0 +1,18 @@
+.custom-rate .ant-rate-star {
+  margin-right: 2px !important; /* Adjust this value to make stars closer or further apart */
+  padding-bottom: 6px;
+  font-size: small;
+}
+.custom-rate .ant-rate-star:first-child {
+  margin-left: 0 !important; /* Ensure the first star doesn't have extra margin */
+}
+
+.custom-rate .ant-rate-star:last-child {
+  margin-right: 0 !important; /* Ensure the last star doesn't have extra margin */
+}
+.custom-rate .ant-rate-star-full .ant-rate-star-first,
+.custom-rate .ant-rate-star-half .ant-rate-star-first,
+.custom-rate .ant-rate-star-full .ant-rate-star-second,
+.custom-rate .ant-rate-star-half .ant-rate-star-second {
+  color: #ffcf57 !important;
+}

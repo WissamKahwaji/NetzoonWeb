@@ -13,16 +13,18 @@ import LoadingComponent from "../loading/LoadingComponent";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 import { CalculateDeliveryRateInput } from "../../../apis/aramex/type";
-import { useAppSelector } from "../../../app/hooks";
+import { useAppDispatch, useAppSelector } from "../../../app/hooks";
 import {
   selectCartValues,
   selectTotalQuantity,
   selectTotalWeight,
+  setDeliveryDetails,
 } from "../../../features/cart/slice";
 
 const DeliveryDetailsPage = () => {
   const { t } = useTranslation();
   const { country } = useCountry();
+  const dispatch = useAppDispatch();
   const userId = localStorage.getItem("userId");
   const totalQuantity = useAppSelector(selectTotalQuantity);
   const totalWeight = useAppSelector(selectTotalWeight);
@@ -42,6 +44,14 @@ const DeliveryDetailsPage = () => {
     values: DeliveryDetailsInfoModel,
     { setSubmitting }: FormikHelpers<DeliveryDetailsInfoModel>
   ) => {
+    dispatch(
+      setDeliveryDetails({
+        shippingAddress: `${values.city} - ${values.addressDetails} - ${values.floorNumber}`,
+        mobile: values.mobile,
+        city: values.city,
+        country: userInfo?.country ?? "AE",
+      })
+    );
     const finalValues: CalculateDeliveryRateInput = {
       originAddress: {
         line1: sellerInfo.line1 || "",
@@ -242,12 +252,9 @@ const DeliveryDetailsPage = () => {
                   value={selectedCity}
                 >
                   {citiesInfo?.Cities.map((city, index) => (
-                    <>
-                      <option key={index} value={city} className="text-xs">
-                        {city}
-                      </option>
-                      ,
-                    </>
+                    <option key={index} value={city} className="text-xs">
+                      {city}
+                    </option>
                   ))}
                 </select>
               )}
@@ -303,7 +310,7 @@ const DeliveryDetailsPage = () => {
               <label className="text-xs font-header">
                 {t("location_type")}
               </label>
-              <div className="flex flex-row justify-start items-center space-x-5 w-full mt-3">
+              <div className="flex flex-row justify-start items-center gap-x-5 w-full mt-3">
                 <div className="flex items-center">
                   <Field
                     type="radio"

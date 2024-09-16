@@ -4,6 +4,8 @@ import publicInstance from "../publicInstance";
 import {
   CalculateDeliveryRateInput,
   CalculateDeliveryRateResponseModel,
+  CreatePickupResponseModel,
+  CreatePickupWithShipmentInputModel,
   FetchCitiesResponseModel,
 } from "./type";
 
@@ -24,4 +26,16 @@ const calculateDeliveryRate = async (payload: CalculateDeliveryRateInput) => {
   return res.data;
 };
 
-export { getAramexCities, calculateDeliveryRate };
+const createPickupWithShipments = async (
+  payload: CreatePickupWithShipmentInputModel
+) => {
+  // const data = createFormData(payload!);
+
+  const res = await publicInstance.post<CreatePickupResponseModel>(
+    API_ROUTES.ARAMEX.CREATE_PICKUP_WITH_SHIPMENT,
+    payload
+  );
+  return res.data;
+};
+
+export { getAramexCities, calculateDeliveryRate, createPickupWithShipments };

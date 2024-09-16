@@ -2,7 +2,12 @@ import React, { createContext, useContext, useState, ReactNode } from "react";
 
 interface AuthContextType {
   isAuthenticated: boolean;
-  login: (token: string, refreshToken?: string, userId?: string) => void;
+  login: (
+    token: string,
+    refreshToken?: string,
+    userId?: string,
+    username?: string
+  ) => void;
   logout: () => void;
 }
 
@@ -15,16 +20,26 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     return Boolean(localStorage.getItem("token"));
   });
 
-  const login = (token: string, refreshToken?: string, userId?: string) => {
+  const login = (
+    token: string,
+    refreshToken?: string,
+    userId?: string,
+    username?: string
+  ) => {
     setIsAuthenticated(true);
     localStorage.setItem("token", token);
     if (refreshToken) localStorage.setItem("refreshToken", refreshToken);
     if (userId) localStorage.setItem("userId", userId);
+    if (username) localStorage.setItem("username", username);
   };
 
   const logout = () => {
     setIsAuthenticated(false);
     localStorage.removeItem("token");
+    localStorage.removeItem("refreshToken");
+    localStorage.removeItem("userId");
+    localStorage.removeItem("username");
+    localStorage.removeItem("cartValues");
   };
 
   return (

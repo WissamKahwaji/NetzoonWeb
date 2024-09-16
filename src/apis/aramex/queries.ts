@@ -1,7 +1,15 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { calculateDeliveryRate, getAramexCities } from ".";
+import {
+  calculateDeliveryRate,
+  createPickupWithShipments,
+  getAramexCities,
+} from ".";
 // import { useNavigate } from "react-router-dom";
-import { CalculateDeliveryRateInput } from "./type";
+import {
+  CalculateDeliveryRateInput,
+  CreatePickupResponseModel,
+  CreatePickupWithShipmentInputModel,
+} from "./type";
 import { toast } from "react-toastify";
 import { ErrorMessage } from "../type";
 import { useAppDispatch } from "../../app/hooks";
@@ -34,4 +42,33 @@ const useCalculateDeliveryRateMutation = () => {
   });
 };
 
-export { useGetAramexCitiesQuery, useCalculateDeliveryRateMutation };
+const useCreatePickUpWithShipmentMutation = () => {
+  const navigate = useNavigate();
+
+  return useMutation({
+    mutationKey: ["create-pickup"],
+    mutationFn: (payload: CreatePickupWithShipmentInputModel) =>
+      createPickupWithShipments(payload),
+    onSuccess: (data: CreatePickupResponseModel) => {
+      if (data.HasErrors === false) {
+        toast.success("create pickup successfully");
+
+        navigate(`/`);
+      } else {
+        toast.error("error, contact with support");
+        navigate(`/`);
+      }
+    },
+    onError: (error: ErrorMessage) => {
+      const errorMessage =
+        error.response?.data?.message || "Failed   please try again later";
+      toast.error(errorMessage);
+    },
+  });
+};
+
+export {
+  useGetAramexCitiesQuery,
+  useCalculateDeliveryRateMutation,
+  useCreatePickUpWithShipmentMutation,
+};

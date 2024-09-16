@@ -1,7 +1,10 @@
 import API_ROUTES from "../../constants/apiRoutes";
+import { createFormData } from "../../utils";
 import publicInstance from "../publicInstance";
 import {
+  RateServiceInputModel,
   ServiceCategoryModel,
+  ServiceInputModel,
   ServiceModel,
   ServicesResponseModel,
 } from "./type";
@@ -41,10 +44,51 @@ const getUserServices = async (id: string) => {
   return res.data;
 };
 
+const addService = async (payload: ServiceInputModel) => {
+  const data = createFormData(payload);
+  const res = await publicInstance.post(
+    API_ROUTES.SERVICES.ADD_SERVICE(
+      payload.category ?? "",
+      payload.country ?? "AE"
+    ),
+    data
+  );
+  return res.data;
+};
+
+const editService = async (payload: ServiceInputModel) => {
+  const data = createFormData(payload);
+  const res = await publicInstance.put(
+    API_ROUTES.SERVICES.EDIT_SERVICE(payload._id!),
+    data
+  );
+  return res.data;
+};
+
+const deleteService = async (id: string) => {
+  const res = await publicInstance.delete(
+    API_ROUTES.SERVICES.DELETE_SERVICE(id)
+  );
+  return res.data;
+};
+
+const rateService = async (paylaod: RateServiceInputModel) => {
+  const data = createFormData(paylaod);
+  const res = await publicInstance.post(
+    API_ROUTES.SERVICES.RATE_SERVICE(paylaod.id),
+    data
+  );
+  return res.data;
+};
+
 export {
   getServiceCategoryById,
   getServicesByCategory,
   getServicesCategories,
   getServiceById,
   getUserServices,
+  addService,
+  editService,
+  deleteService,
+  rateService,
 };

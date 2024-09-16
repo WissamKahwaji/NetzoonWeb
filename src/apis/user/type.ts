@@ -1,3 +1,8 @@
+import { AdsModel } from "../ads/type";
+import { ProductModel } from "../product/type";
+import { RealEstateModel } from "../real_estate/type";
+import { VehicleModel } from "../vehicle/type";
+
 export type UserModel = {
   _id?: string;
   username: string;
@@ -84,4 +89,52 @@ export type SignupResponse = {
   refreshToken: string;
 };
 
+export type RequestBalanceInputModel = {
+  service_id: string;
+  template_id: string;
+  user_id: string;
+  template_params: TemplateParams;
+};
+
+export type TemplateParams = {
+  user_balance: number;
+  user_name: string;
+  user_email: string;
+  account_name: string;
+  bank_name: string;
+  iban: string;
+  user_mobile: string;
+};
+
+export type SearchResponseModel = {
+  users: UserModel[];
+  products: ProductModel[];
+  advertisments: AdsModel[];
+  vehicles: VehicleModel[];
+  realEstates: RealEstateModel[];
+  query: string;
+};
+
 export type SignInValues = { email: string; password: string };
+
+export type AddAccountInputModel = {
+  email: string;
+  username: string;
+  password: string;
+};
+
+export type ResetPasswordParams = {
+  password: string;
+  token: string;
+  confirmPassword: string;
+};
+
+export type ForgetPasswordParams = {
+  email: string;
+};
+
+export type RateUserInputModel = {
+  id: string;
+  rating: number;
+  userId: string;
+};

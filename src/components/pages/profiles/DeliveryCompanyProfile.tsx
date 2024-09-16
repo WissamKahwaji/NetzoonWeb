@@ -7,8 +7,19 @@ import { DeliverServiceModel } from "../../../apis/delivery_service/type";
 import { AdsModel } from "../../../apis/ads/type";
 import AdsCard from "../advertising/AdsCard";
 import UserInfoList from "./UserInfoList";
-import { getCurrencyFromCountry } from "../../../utils";
+import { getCurrencyFromCountry, roundToHalf } from "../../../utils";
 import { useCountry } from "../../../context/CountryContext";
+import FollowButton from "../../const/follow-btn/FollowButton";
+import { Rate } from "antd";
+import { toast } from "react-toastify";
+import { useAuth } from "../../../context/AuthContext";
+import RatingDialog from "../../const/rating-dialog/RatingDialog";
+import { GroupChannel } from "@sendbird/uikit-react/GroupChannel";
+import Modal from "react-modal";
+
+import "@sendbird/uikit-react/dist/index.css";
+import { IoClose } from "react-icons/io5";
+import ChatButton from "../../const/chat-btn/ChatButton";
 
 interface DeliveryCompanyProfileProps {
   userInfo: UserModel;
@@ -21,6 +32,14 @@ const DeliveryCompanyProfile = ({
   const { t } = useTranslation();
   const { country } = useCountry();
   const [activeTab, ActiveTab] = useState("services");
+  const { isAuthenticated } = useAuth();
+  const userId = localStorage.getItem("userId");
+  const [isRatingDialogVisible, setRatingDialogVisible] =
+    useState<boolean>(false);
+  const [channelUrl, setChannelUrl] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
   const tabs = [
     { tab: "services", label: "services" },
     { tab: "my_ads", label: "my_ads" },
@@ -41,6 +60,23 @@ const DeliveryCompanyProfile = ({
     isError: isErrorAds,
   } = useGetUserAdsQuery(id ?? "", activeTab === "my_ads");
 
+  const showRatingDialog = () => {
+    if (!isAuthenticated) {
+      toast.error("you must be authenticated, login first");
+    } else {
+      if (userId !== userInfo._id) {
+        setRatingDialogVisible(true);
+      }
+    }
+  };
+  const hideRatingDialog = () => {
+    setRatingDialogVisible(false);
+  };
+  const handleCreateChannel = (url: string) => {
+    setChannelUrl(url);
+    openModal();
+  };
+
   return (
     <div className="flex flex-col justify-start items-start  py-2 font-header w-full md:w-[60%] md:mx-auto md:py-5">
       {userInfo.coverPhoto && (
@@ -59,24 +95,42 @@ const DeliveryCompanyProfile = ({
               className="h-24 w-24 rounded-full border border-primary"
               crossOrigin="anonymous"
             />
-            <div className="flex flex-col space-y-2 justify-start items-stretch mx-2">
+            <div
+              className="flex flex-col space-y-2 justify-start items-stretch mx-2"
+              onClick={showRatingDialog}
+            >
               <p className="font-bold text-black">{userInfo?.username}</p>
               <p className="text-sm text-gray-500">{userInfo?.slogn}</p>
               <div className="flex flex-row gap-x-2 text-sm">
-                <p className="text-sm">{userInfo?.averageRating}</p>
+                {/* <p className="text-sm">{userInfo?.averageRating}</p> */}
+                <Rate
+                  allowHalf
+                  value={roundToHalf(userInfo?.averageRating ?? 0)}
+                  disabled
+                  className="custom-rate"
+                  // style={{ fontSize: 36 }}
+                />
                 <p className="text-sm text-gray-500">{`(${userInfo?.totalRatings} Reviews)`}</p>
               </div>
             </div>
           </div>
-          <button className="py-1 w-24 h-fit bg-primary text-white rounded-full justify-center items-center">
-            Follow
-          </button>
+          <RatingDialog
+            id={userInfo._id ?? ""}
+            userId={userId ?? ""}
+            visible={isRatingDialogVisible}
+            onClose={hideRatingDialog}
+            // onRatingSubmit={handleRatingSubmit}
+          />
+          <FollowButton otherUserId={userInfo._id ?? ""} />
         </div>
         <p className="text-gray-600 mt-2">{userInfo?.bio}</p>
         <div className="w-full flex flex-row justify-center items-center gap-x-3 md:gap-x-10 mt-4">
-          <button className="py-2 w-32 h-fit bg-primary text-white rounded-full justify-center items-center">
-            {t("chat")}
-          </button>
+          <ChatButton
+            userId={userId ?? ""}
+            otherPersonId={userInfo.username}
+            onCreateChannel={handleCreateChannel}
+            coverUrl={userInfo.profilePhoto ?? ""}
+          />
           <button className="py-2 w-32 h-fit bg-primary text-white rounded-full justify-center items-center">
             {t("live_auction")}
           </button>
@@ -170,6 +224,20 @@ const DeliveryCompanyProfile = ({
           </>
         </div>
       </div>
+      <Modal
+        isOpen={isModalOpen}
+        onRequestClose={closeModal}
+        contentLabel="Confirm Delete"
+        className="fixed inset-0 flex items-center justify-center z-50"
+        overlayClassName="fixed inset-0 bg-black bg-opacity-50"
+      >
+        <div className="bg-white p-6 rounded-lg shadow-lg max-w-[96%] min-w-[90%] md:max-w-2xl md:min-w-[50%] h-[70%]  md:h-[500px] mt-20 flex flex-col">
+          <div className="w-full flex justify-end items-center mb-2">
+            <IoClose className="w-6 h-6 cursor-pointer " onClick={closeModal} />
+          </div>
+          <GroupChannel channelUrl={channelUrl} />
+        </div>
+      </Modal>
     </div>
   );
 };

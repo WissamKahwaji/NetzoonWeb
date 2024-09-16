@@ -8,10 +8,12 @@ import { useGetFeesInfoQuery } from "../../../apis/fees/queries";
 import LoadingComponent from "../loading/LoadingComponent";
 import { getCurrencyFromCountry } from "../../../utils";
 import { useCountry } from "../../../context/CountryContext";
+import { useNavigate } from "react-router-dom";
 
 const SummeryOrderPage = () => {
   const { t } = useTranslation();
   const { country } = useCountry();
+  const navigate = useNavigate();
   const { data: dataInfo, isError, isLoading } = useGetFeesInfoQuery();
 
   const serviceFee = dataInfo?.feesFromBuyer ?? 0;
@@ -20,7 +22,7 @@ const SummeryOrderPage = () => {
   if (isError) return <div>Error !!!</div>;
   if (isLoading) return <LoadingComponent />;
   return (
-    <div className="flex flex-col justify-start items-center gap-y-2 mt-20 font-header px-2 w-full">
+    <div className="flex flex-col justify-start items-center gap-y-2 mt-40 mb-10 font-header px-2 w-full">
       <p className="text-2xl font-bold text-primary mb-10">
         {t("summery_orders")}
       </p>
@@ -53,7 +55,12 @@ const SummeryOrderPage = () => {
           </p>
         </div>
         <div className="w-full flex justify-center items-center pt-7 text-white">
-          <button className="rounded-full bg-primary py-2 w-1/2">
+          <button
+            className="rounded-full bg-primary py-2 w-1/2"
+            onClick={() => {
+              navigate("checkout");
+            }}
+          >
             {t("check_out")}
           </button>
         </div>

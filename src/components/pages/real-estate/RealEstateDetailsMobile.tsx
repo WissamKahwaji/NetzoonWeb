@@ -6,6 +6,11 @@ import { getCurrencyFromCountry } from "../../../utils";
 import { IoShareSocialSharp } from "react-icons/io5";
 import { useTranslation } from "react-i18next";
 import { useCountry } from "../../../context/CountryContext";
+import { Link, useNavigate } from "react-router-dom";
+import { useDeleteRealEstateMutation } from "../../../apis/real_estate/queries";
+import { useState } from "react";
+import Modal from "react-modal";
+import { MdDelete, MdEdit } from "react-icons/md";
 
 interface RealEstateDetailsMobileProps {
   realEstateInfo: RealEstateModel | undefined;
@@ -16,6 +21,19 @@ const RealEstateDetailsMobile = ({
 }: RealEstateDetailsMobileProps) => {
   const { t } = useTranslation();
   const { country } = useCountry();
+  const navigate = useNavigate();
+  const userId = localStorage.getItem("userId");
+
+  const { mutate: deleteRealEstateInfo } = useDeleteRealEstateMutation();
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
+
+  const handleDeleteRealEstate = () => {
+    deleteRealEstateInfo(realEstateInfo?._id ?? "");
+  };
+
   const settings = {
     dots: false,
     infinite: false,
@@ -97,6 +115,21 @@ const RealEstateDetailsMobile = ({
         </div>
       </div>
       <p className="text-lg font-body">{realEstateInfo?.title}</p>
+      {userId === realEstateInfo?.createdBy?._id && (
+        <div className="flex flex-row justify-start items-center gap-x-6">
+          <MdEdit
+            className="text-primary w-6 h-6 cursor-pointer"
+            onClick={() => {
+              navigate("edit");
+            }}
+          />
+
+          <MdDelete
+            className="text-red-500 w-6 h-6 cursor-pointer"
+            onClick={openModal}
+          />
+        </div>
+      )}
       <hr className=" bg-slate-400 h-0.5 w-full" />
       <div className="flex flex-col space-y-3 w-full capitalize">
         <div className="flex flex-row  justify-between items-center w-full   border-b  border-primary/30">
@@ -175,6 +208,57 @@ const RealEstateDetailsMobile = ({
           )}
         </div>
       </div>
+      <div className=" fixed  bottom-[62px] w-full flex justify-center items-center py-3 bg-slate-100 flex-row gap-x-3 md:w-1/2 left-0 right-0 md:mx-auto">
+        <Link to={`tel:${realEstateInfo?.createdBy.firstMobile}`}>
+          <button className="px-2 py-2 text-white rounded-xl bg-primary  w-28">
+            {t("call")}
+          </button>
+        </Link>
+        <button className="px-2 py-2 text-white rounded-xl bg-primary  w-28">
+          {t("chat")}
+        </button>
+        <button
+          className="px-2 py-2 text-white rounded-xl bg-primary  w-28"
+          onClick={() => {
+            if (realEstateInfo?.createdBy.firstMobile) {
+              const sanitizedNumber =
+                realEstateInfo?.createdBy.firstMobile.replace(/\s+/g, "");
+              window.open(`https://wa.me/${sanitizedNumber}`, "_blank");
+            }
+          }}
+        >
+          {t("whatsapp")}
+        </button>
+      </div>
+      <Modal
+        isOpen={isModalOpen}
+        onRequestClose={closeModal}
+        contentLabel="Confirm Delete"
+        className="fixed inset-0 flex items-center justify-center z-50"
+        overlayClassName="fixed inset-0 bg-black bg-opacity-50"
+      >
+        <div className="bg-white p-6 rounded-lg shadow-lg max-w-sm w-full">
+          <h2 className="text-lg font-bold mb-4">{t("delete_real_esate")}</h2>
+          <p className="mb-4">{t("delete_real_esate_warning")}</p>
+          <div className="flex justify-end gap-4">
+            <button
+              onClick={closeModal}
+              className="px-4 py-2 bg-gray-300 rounded-md"
+            >
+              {t("no")}
+            </button>
+            <button
+              onClick={() => {
+                handleDeleteRealEstate();
+                closeModal();
+              }}
+              className="px-4 py-2 bg-red-600 text-white rounded-md"
+            >
+              {t("yes")}
+            </button>
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 };

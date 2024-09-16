@@ -6,7 +6,7 @@ export type RealEstateModel = {
   imageUrl: string;
   description: string;
   price: number;
-  area?: string;
+  area?: number;
   location?: string;
   bedrooms?: number;
   bathrooms?: number;
@@ -18,4 +18,29 @@ export type RealEstateModel = {
   category?: string;
   forWhat?: string;
   furnishing?: boolean;
+};
+
+export type RealEstateInputModel = {
+  _id?: string;
+  title: string;
+  imageUrl: string;
+  description: string;
+  price: number;
+  area?: number;
+  location?: string;
+  bedrooms?: number;
+  bathrooms?: number;
+  amenities?: string[];
+  images?: string[];
+  createdBy: string;
+  country: string;
+  type?: string;
+  category?: string;
+  forWhat?: string;
+  furnishing?: boolean;
+};
+
+export type RealEstateType = {
+  name: string;
+  categories: string[];
 };

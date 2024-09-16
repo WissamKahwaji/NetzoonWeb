@@ -9,3 +9,13 @@ export type DeliverServiceModel = {
   price: number;
   owner: UserModel;
 };
+
+export type DeliverServiceInputModel = {
+  _id?: string;
+  title: string;
+  description: string;
+  from: string;
+  to: string;
+  price: number;
+  owner: string;
+};

@@ -1,24 +1,61 @@
 import { useTranslation } from "react-i18next";
 import { useCountry } from "../../context/CountryContext";
-import { useGetNewsListQuery } from "../../apis/news/queries";
+import {
+  useAddCommentMutation,
+  useGetNewsCommentsQuery,
+  useGetNewsListQuery,
+} from "../../apis/news/queries";
 import LoadingComponent from "../../components/pages/loading/LoadingComponent";
-import { formatDateWithoutTime } from "../../utils";
-import { MdOutlineFavoriteBorder } from "react-icons/md";
-import { BiComment } from "react-icons/bi";
-import { IoMdShare } from "react-icons/io";
-import { useAuth } from "../../context/AuthContext";
-import { useNavigate } from "react-router-dom";
+import NewsCard from "../../components/pages/news/NewsCard";
+import Modal from "react-modal";
+import { useState } from "react";
+import { Formik, FormikHelpers } from "formik";
+import { AddCommentInputModel } from "../../apis/news/type";
+import { IoIosSend, IoMdClose } from "react-icons/io";
 
 const NewsListPage = () => {
   const { t } = useTranslation();
   const { country } = useCountry();
-  const { isAuthenticated } = useAuth();
-  const navigate = useNavigate();
+  const userId = localStorage.getItem("userId");
+  const [selectedNews, setSelectedNews] = useState<string | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const openModal = (newsId: string) => {
+    setSelectedNews(newsId);
+    setIsModalOpen(true);
+  };
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setSelectedNews(null);
+  };
   const {
     data: newsListInfo,
     isError,
     isLoading,
   } = useGetNewsListQuery(country);
+  const {
+    data: commentsInfo,
+    isError: isErrorComments,
+    isLoading: isLoadingComments,
+  } = useGetNewsCommentsQuery(selectedNews ?? "", isModalOpen);
+  const { mutate: addComment } = useAddCommentMutation();
+
+  const initialValues: AddCommentInputModel = {
+    newsId: selectedNews ?? "",
+    text: "",
+    userId: userId ?? "",
+  };
+
+  const handleSubmit = (
+    values: AddCommentInputModel,
+    { setSubmitting, resetForm }: FormikHelpers<AddCommentInputModel>
+  ) => {
+    addComment(values, {
+      onSettled() {
+        setSubmitting(false);
+      },
+    });
+    resetForm();
+  };
 
   if (isError) return <div>Error !!!</div>;
   if (isLoading) return <LoadingComponent />;
@@ -29,67 +66,13 @@ const NewsListPage = () => {
         <div className="w-full grid grid-cols-1 gap-x-4 gap-y-5 md:grid-cols-1 md:gap-4 md:w-1/3  ">
           {newsListInfo &&
             newsListInfo.map((item, index) => (
-              <div
+              <NewsCard
                 key={index}
-                className="flex flex-col w-full h-[400px] md:h-[500px] space-y-2"
-              >
-                <div className="w-full flex flex-row justify-start items-center gap-x-3">
-                  <img
-                    src={item.creator?.profilePhoto}
-                    alt=""
-                    className="rounded-full w-8 h-8 "
-                  />
-                  <p className="text-sm text-primary font-semibold">
-                    {item.creator?.username}
-                  </p>
-                </div>
-                <div
-                  className="relative rounded-lg"
-                  onClick={() => {
-                    navigate(`${item._id}`);
-                  }}
-                >
-                  <div className="absolute bottom-0 w-full h-1/3 bg-primary/80 rounded-lg flex flex-col justify-start items-center text-white text-xs py-0.5 space-y-2">
-                    {item.updatedAt && (
-                      <p>{formatDateWithoutTime(item.updatedAt)}</p>
-                    )}
-                    <p>{item.title}</p>
-                    <p className="text-center line-clamp-1 ">
-                      {item.description}
-                    </p>
-                  </div>
-                  <img
-                    src={item.imgUrl}
-                    alt=""
-                    className="w-full h-auto object-cover rounded-lg"
-                    crossOrigin="anonymous"
-                  />
-                </div>
-                {isAuthenticated && (
-                  <div className="flex flex-row items-center justify-start gap-x-3">
-                    <MdOutlineFavoriteBorder className="md:w-5 md:h-5" />
-                    <BiComment className="md:w-5 md:h-5" />
-                    <IoMdShare className="md:w-5 md:h-5" />
-                  </div>
-                )}
-                <p className="text-xs text-gray-400">{`${
-                  item.likes?.length
-                } ${t("people_like_this")}`}</p>
-                <p className="text-xs text-gray-400">
-                  {item.comments?.length !== undefined &&
-                  item.comments?.length > 0
-                    ? item.comments.length
-                    : t("no_comments")}
-                </p>
-                <p className="capitalize text-sm text-gray-400">
-                  {t("view_all_comments")}
-                </p>
-                {item.updatedAt && (
-                  <p className="text-gray-400 text-xs">
-                    {formatDateWithoutTime(item.updatedAt)}
-                  </p>
-                )}
-              </div>
+                news={item}
+                onCommentClick={() => {
+                  openModal(item._id!);
+                }}
+              />
             ))}
         </div>
       ) : (
@@ -97,6 +80,104 @@ const NewsListPage = () => {
           {t("no_data_to_show")}
         </p>
       )}
+      <Modal
+        isOpen={isModalOpen}
+        onRequestClose={closeModal}
+        contentLabel="Comments"
+        className="fixed inset-0  flex items-center justify-center z-50"
+        overlayClassName="fixed inset-0 bg-black bg-opacity-50"
+      >
+        <div className=" bg-white md:min-w-[600px] p-6 rounded-lg shadow-lg max-w-sm w-full mt-16 md:mt-0 max-h-[400px] md:max-h-full ">
+          <div className="flex  flex-row w-full justify-center items-center mb-5 gap-x-3">
+            <p className=" text-center ">{t("comments")}</p>
+            <IoMdClose
+              className="w-5 h-5 cursor-pointer"
+              onClick={closeModal}
+            />
+          </div>
+
+          <div className="flex flex-col w-full space-y-5 max-h-[400px] md:max-h-full">
+            {isLoadingComments && <LoadingComponent />}
+            {isErrorComments && <div>Error !!</div>}
+            {commentsInfo && commentsInfo.length > 0 ? (
+              <div className="max-h-[250px] md:max-h-full overflow-y-auto md:overflow-auto">
+                {commentsInfo.map((comment, index) => (
+                  <div
+                    key={index}
+                    className="flex flex-row gap-x-2 justify-start items-start border-b border-gray-200"
+                  >
+                    <img
+                      src={comment.user.profilePhoto}
+                      crossOrigin="anonymous"
+                      alt=""
+                      className="w-10 h-10 rounded-full border border-gray-500"
+                    />
+                    <div className="space-y-2">
+                      <p className="text-xs text-gray-500">
+                        {comment.user.username}
+                      </p>
+                      <p className="text-sm">{comment.text}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="w-full">
+                <p>{t("no_data_to_show")}</p>
+              </div>
+            )}
+            <Formik
+              initialValues={initialValues}
+              // validationSchema={validationSchema}
+              enableReinitialize
+              onSubmit={handleSubmit}
+            >
+              {({
+                values,
+                errors,
+                touched,
+                handleChange,
+                handleBlur,
+                handleSubmit,
+                isSubmitting,
+              }) => (
+                <form
+                  onSubmit={handleSubmit}
+                  className="w-full justify-center items-center"
+                >
+                  <div className="flex flex-row gap-x-2 w-full justify-start items-center">
+                    <div className="flex-1">
+                      <input
+                        id="text"
+                        name="text"
+                        type="text"
+                        placeholder="your comment"
+                        className="px-4 py-2 w-full border border-primary rounded-lg focus:outline-none focus:ring-2 focus:ring-navBackground"
+                        onBlur={handleBlur}
+                        onChange={handleChange}
+                        value={values.text}
+                        style={{ direction: "ltr" }}
+                      />
+                      {errors.text && touched.text && (
+                        <div className="text-red-500 text-xs mt-1">
+                          {errors.text}
+                        </div>
+                      )}
+                    </div>
+                    <button
+                      type="submit"
+                      disabled={isSubmitting}
+                      className="p-2 bg-primary rounded-md"
+                    >
+                      <IoIosSend className="w-5 h-5 text-white" />
+                    </button>
+                  </div>
+                </form>
+              )}
+            </Formik>
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 };

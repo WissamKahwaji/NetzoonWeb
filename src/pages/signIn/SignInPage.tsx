@@ -3,7 +3,7 @@ import { FaUserLock } from "react-icons/fa";
 import { SignInValues } from "../../apis/user/type";
 import { Form, Formik, FormikHelpers } from "formik";
 import * as Yup from "yup";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useSignInMutation } from "../../apis/user/queries";
 import { FaEye, FaEyeLowVision, FaGoogle } from "react-icons/fa6";
 import { PulseLoader } from "react-spinners";
@@ -34,8 +34,36 @@ const SignInPage = () => {
       },
     });
   };
+
+  const handleGoogleLogin = () => {
+    // Redirect to Google OAuth endpoint
+    window.location.href =
+      "https://www.netzoonback.siidevelopment.com/user/auth/google";
+  };
+
+  const handleFacebookLogin = () => {
+    window.location.href =
+      "https://www.netzoonback.siidevelopment.com/user/auth/facebook";
+  };
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const token = params.get("token");
+    const userName = params.get("username");
+    const userId = params.get("userId");
+
+    if (token && userName && userId) {
+      // Store token in localStorage
+      localStorage.setItem("token", token);
+      localStorage.setItem("userId", userId);
+      localStorage.setItem("username", userName);
+
+      window.location.href = `/my-account/edit`;
+    }
+  }, []);
+
   return (
-    <div className="flex flex-col justify-center items-center gap-y-2 font-body mt-32">
+    <div className="flex flex-col justify-center items-center gap-y-2 font-body mt-32 mb-10">
       <FaUserLock className="text-primary w-20 h-auto" />
       <p className="font-semibold text-black">{t("welcome")}</p>
       <Formik
@@ -94,12 +122,18 @@ const SignInPage = () => {
                 <div className="text-red-500 text-xs">{errors.password}</div>
               )}
             </div>
-            <Link to={`/signup`}>
-              <div className="w-full flex flex-row justify-between items-center text-xs underline text-primary mt-2">
-                <p className="text-gray-500">{t("forget_password")}</p>
+
+            <div className="w-full flex flex-row justify-between items-center text-xs underline text-primary mt-2">
+              <Link to={"/forget-password"}>
+                <p className="text-gray-500 cursor-pointer">
+                  {t("forget_password")}
+                </p>
+              </Link>
+              <Link to={`/signup`}>
                 <p>{t("create_new_account")}</p>
-              </div>
-            </Link>
+              </Link>
+            </div>
+
             <div className="mt-7 w-full">
               <button
                 type="submit"
@@ -120,11 +154,17 @@ const SignInPage = () => {
               </div>
               <div className="border-t border-gray-300 flex-grow"></div>
             </div>
-            <div className="capitalize mt-4 py-2 w-full rounded-md border-2 border-primary shadow-md flex justify-center items-center gap-x-2">
+            <div
+              className="cursor-pointer capitalize mt-4 py-2 w-full rounded-md border-2 border-primary shadow-md flex justify-center items-center gap-x-2 hover:scale-105 duration-300 ease-in-out"
+              onClick={handleGoogleLogin}
+            >
               <FaGoogle className="text-primary w-8 h-auto" />
               <p>{t("sign_in_with_google")}</p>
             </div>
-            <div className="capitalize mt-4 py-2 w-full rounded-md border-2 border-primary shadow-md flex justify-center items-center gap-x-2">
+            <div
+              className="capitalize mt-4 py-2 w-full rounded-md border-2 border-primary shadow-md flex justify-center items-center gap-x-2 hover:scale-105 duration-300 ease-in-out cursor-pointer"
+              onClick={handleFacebookLogin}
+            >
               <IoLogoFacebook className="text-primary w-8 h-auto" />
               <p>{t("sign_in_with_facebook")}</p>
             </div>

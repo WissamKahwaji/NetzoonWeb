@@ -13,6 +13,7 @@ import PlanesContainer from "../../components/pages/home/planes_container/Planes
 import RealEstateContainer from "../../components/pages/home/real_estate_container/RealEstateContainer";
 import SecondSliderComponent from "../../components/pages/home/slider/SecondSliderComponent";
 import { useNavigate } from "react-router-dom";
+import ChatContainer from "../chat/ChatContainer";
 
 const HomePage = () => {
   const {
@@ -51,6 +52,7 @@ const HomePage = () => {
       <DealsContainer />
       <AdsContainer />
       <NewsContainer />
+      <ChatContainer />
     </div>
   );
 };

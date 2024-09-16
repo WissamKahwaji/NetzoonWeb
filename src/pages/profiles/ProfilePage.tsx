@@ -1,5 +1,8 @@
 import { useParams } from "react-router-dom";
-import { useGetUserByIdQuery } from "../../apis/user/queries";
+import {
+  useAddVisitorMutation,
+  useGetUserByIdQuery,
+} from "../../apis/user/queries";
 import LoadingComponent from "../../components/pages/loading/LoadingComponent";
 
 import { USER_TYPE } from "../../constants";
@@ -8,11 +11,26 @@ import LocalCompanyProfile from "../../components/pages/profiles/LocalCompanyPro
 import VehicleCompanyProfile from "../../components/pages/profiles/VehicleCompanyProfile";
 import RealEstateCompanyProfile from "../../components/pages/profiles/RealEstateCompanyProfile";
 import DeliveryCompanyProfile from "../../components/pages/profiles/DeliveryCompanyProfile";
+import { useAuth } from "../../context/AuthContext";
+import { useEffect } from "react";
 
 const ProfilePage = () => {
   const { id } = useParams<{ id: string }>();
+  const { isAuthenticated } = useAuth();
 
   const { data: userInfo, isError, isLoading } = useGetUserByIdQuery(id ?? "");
+  const { mutate: addVisitor } = useAddVisitorMutation();
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      const userId = localStorage.getItem("userId");
+      const params = {
+        viewerUserId: userInfo?._id ?? "",
+        userId: userId ?? "",
+      };
+      addVisitor(params);
+    }
+  }, [addVisitor, isAuthenticated, userInfo?._id]);
 
   if (isError) return <div>Error !!!</div>;
   if (isLoading) return <LoadingComponent />;

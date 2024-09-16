@@ -1,10 +1,10 @@
 import { ProductModel } from "../../../apis/product/type";
 import { MdOutlineAddShoppingCart } from "react-icons/md";
-import { IoShareSocialSharp } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch } from "../../../app/hooks";
 import { addToCart } from "../../../features/cart/slice";
 import { toast } from "react-toastify";
+import ShareButton from "../../const/share-btn/ShareButton";
 interface ProductCardProps {
   product: ProductModel;
 }
@@ -13,10 +13,15 @@ const ProductCard = ({ product }: ProductCardProps) => {
   const dispatch = useAppDispatch();
   const userId = localStorage.getItem("userId");
   const handleAddToCart = (product: ProductModel) => {
-    if (userId === product.owner._id) {
-      toast.error("you can't buy your product");
+    // const t: string = `${product.owner}`;
+    if (userId) {
+      if (userId === product.owner._id) {
+        toast.error("you can't buy your product");
+      } else {
+        dispatch(addToCart({ ...product, count: 1 }));
+      }
     } else {
-      dispatch(addToCart({ ...product, count: 1 }));
+      toast.error("please login first");
     }
   };
 
@@ -24,10 +29,11 @@ const ProductCard = ({ product }: ProductCardProps) => {
     <div
       className="bg-white shadow-md rounded-md flex flex-col justify-start items-start hover:scale-105 transform ease-in-out duration-300 cursor-pointer"
       onClick={() => {
-        navigate(`${product._id}`);
-        // navigate(
-        //   `/departments/${product.category?.department}/${product.category?._id}/products/${product._id}`
-        // );
+        console.log(product.category?.department);
+        // navigate(`${product._id}`);
+        navigate(
+          `/departments/${product.category?.department}/${product.category?._id}/products/${product._id}`
+        );
       }}
     >
       <img
@@ -56,7 +62,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
               handleAddToCart(product);
             }}
           />
-          <IoShareSocialSharp className="w-5 h-5 text-primary" />
+          <ShareButton link={`${window.location.href}/${product._id}`} />
         </div>
       </div>
     </div>

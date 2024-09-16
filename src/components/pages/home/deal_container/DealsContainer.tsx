@@ -30,8 +30,6 @@ const DealsContainer = () => {
     infinite: false,
     speed: 500,
     slidesToShow: 3.5,
-    initialSlide: 0,
-
     slidesToScroll: 3.5,
     rtl: false,
     arrows: false,
