@@ -79,7 +79,10 @@ const Navbar = ({ profileImage, departmentsInfo, username }: NavbarParams) => {
 
   return (
     <>
-      <header className="fixed left-0 top-0 z-[1001] w-full bg-seconBackground border-b border-gray-200 shadow-sm">
+      <header
+        className="fixed left-0 top-0 z-[1001] w-full bg-seconBackground border-b border-gray-200 shadow-sm"
+        style={{ direction: "ltr" }}
+      >
         <nav className="hidden md:flex items-center justify-between px-5 py-3">
           <div className="flex items-center gap-x-4">
             <Link to="/home">
@@ -230,7 +233,7 @@ const Navbar = ({ profileImage, departmentsInfo, username }: NavbarParams) => {
             />
             <Link
               to={"add"}
-              className="flex justify-center items-center bg-primary px-3 py-0.5 rounded font-serif capitalize"
+              className="flex justify-start items-center bg-primary px-3 py-0.5 rounded font-serif capitalize"
             >
               <p className="text-white">{t("add_item")}</p>
             </Link>
@@ -280,7 +283,7 @@ const Navbar = ({ profileImage, departmentsInfo, username }: NavbarParams) => {
         </nav>
         <div className="hidden md:flex bg-seconBackground py-2 px-5">
           <div className="flex justify-between items-center text-gray-800">
-            <div className="flex items-center gap-x-4">
+            <div className="flex items-center lg:gap-x-2 2xl:gap-x-4">
               {departmentsInfo &&
                 departmentsInfo.map((department, index) => (
                   <Link
@@ -288,7 +291,7 @@ const Navbar = ({ profileImage, departmentsInfo, username }: NavbarParams) => {
                     to={`/departments/${department._id}`}
                     className={`font-semibold capitalize ${
                       department.name === "in_account" ? "hidden" : "flex"
-                    } hover:text-primary`}
+                    } hover:text-primary lg:text-xs 2xl:text-base`}
                   >
                     {t(department.name)}
                   </Link>
@@ -373,13 +376,15 @@ const Navbar = ({ profileImage, departmentsInfo, username }: NavbarParams) => {
             <Link to={`/notifications`} className="flex items-center">
               <IoIosNotifications className="w-6 h-6 text-primary" />
             </Link>
-            <IoIosLogOut
-              className="w-6 h-6 text-primary "
-              onClick={() => {
-                logout();
-                window.location.href = "/signin";
-              }}
-            />
+            {isAuthenticated && (
+              <IoIosLogOut
+                className="w-6 h-6 text-primary "
+                onClick={() => {
+                  logout();
+                  window.location.href = "/signin";
+                }}
+              />
+            )}
             <LanguageButton
               title={selectedLang === "en" ? "English" : "العربية"}
               className="relative flex items-center rounded-lg"

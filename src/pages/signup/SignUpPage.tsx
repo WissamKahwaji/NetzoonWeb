@@ -29,16 +29,21 @@ const SignUpPage = () => {
     isError: isErrorFactoriesCat,
     isLoading: isLoadingFactoriesCat,
   } = useGetFactoriesCategoriesQuery(userType === USER_TYPE.FACTORY);
-  const [selectedCity, setSelectedCity] = useState(citiesInfo?.Cities[0] || "");
+  const [selectedCity, setSelectedCity] = useState("");
   const [selectedFactoryCat, setSelectedFactoryCat] = useState("");
+
   useEffect(() => {
-    if (citiesInfo) {
-      setSelectedCity(citiesInfo?.Cities[0]);
+    if (citiesInfo && citiesInfo.Cities.length > 0) {
+      const firstCity = citiesInfo.Cities[0];
+      setSelectedCity(firstCity);
+      // Set the default city in Formik
     }
+  }, [citiesInfo]);
+  useEffect(() => {
     if (factoriesCategories) {
       setSelectedFactoryCat(factoriesCategories[0].title);
     }
-  }, [citiesInfo, factoriesCategories]);
+  }, [factoriesCategories]);
   const validationSchema = Yup.object().shape({
     username: Yup.string().required("Please enter your username"),
     email: Yup.string().required("Please enter your email"),
@@ -55,7 +60,20 @@ const SignUpPage = () => {
 
     locationType: Yup.string().required("Please choose location Type"),
     city: Yup.string().required("Please choose city"),
+    address: Yup.string().required("Please enter address"),
     addressDetails: Yup.string().required("Please enter address Details"),
+    profilePhoto: Yup.mixed()
+      .required("Profile photo is required")
+      .test("fileSize", "File is too large", value => {
+        return value && value instanceof File && value.size <= 2 * 1024 * 1024;
+      })
+      .test("fileType", "Unsupported file format", value => {
+        return (
+          value &&
+          value instanceof File &&
+          ["image/jpg", "image/jpeg", "image/png"].includes(value.type)
+        );
+      }),
   });
   const initialValues: UserModel = {
     username: "",
@@ -95,7 +113,7 @@ const SignUpPage = () => {
     deliveryMotorsNum: 0,
     vehicles: [],
     products: [],
-    city: "",
+    city: "Abadilah",
     addressDetails: "",
     contactName: "",
     floorNum: 0,
@@ -528,7 +546,7 @@ const SignUpPage = () => {
               </div>
             )}
             <hr className="w-full" />
-            <div className="flex flex-col space-y-2">
+            <div className="flex flex-col space-y-2 w-full">
               <p className="font-semibold">{t("location_info")} :</p>
               <div className="relative">
                 <label htmlFor="city">{t("city")}</label>
@@ -542,7 +560,7 @@ const SignUpPage = () => {
                     onBlur={handleBlur}
                     onChange={e => {
                       // setAccountType(e.currentTarget.value);
-                      setFieldValue("city", e.currentTarget.value);
+                      setFieldValue("city", e.target.value);
                       setSelectedCity(e.target.value);
                     }}
                     value={selectedCity}
@@ -567,10 +585,36 @@ const SignUpPage = () => {
                   </svg>
                 </div>
               </div>
+              <div className="flex flex-col w-full flex-wrap">
+                <label className="text-xs font-header">{t("address")}</label>
+                <p className="text-xs text-gray-500 mb-1 w-full break-all">
+                  {t(
+                    "please_enter_your_address_in_english_language_according_to_delivery_policy"
+                  )}
+                </p>
+                <input
+                  type="text"
+                  name="address"
+                  className="text-xs w-full font-header mb-2 rounded border bg-white border-primary px-2 py-2 focus:outline-none focus:border-gray-400"
+                  placeholder={t("address")}
+                  onBlur={handleBlur}
+                  onChange={handleChange}
+                  value={values.address}
+                  style={{ direction: "ltr" }}
+                />
+                {errors.address && touched.address && (
+                  <div className="text-red-500 text-xs">{errors.address}</div>
+                )}
+              </div>
               <div>
                 <label className="text-xs font-header">
                   {t("address_details")}
                 </label>
+                <p className="text-xs text-gray-500 mb-1 w-full break-all">
+                  {t(
+                    "please_enter_your_address_details_in_english_language_according_to_delivery_policy"
+                  )}
+                </p>
                 <input
                   type="text"
                   name="addressDetails"
@@ -664,6 +708,11 @@ const SignUpPage = () => {
                   }
                 }}
               />
+              {errors.profilePhoto && touched.profilePhoto && (
+                <div className="text-red-500 text-xs">
+                  {errors.profilePhoto}
+                </div>
+              )}
             </div>
             {userType !== USER_TYPE.USER && (
               <>
@@ -672,7 +721,7 @@ const SignUpPage = () => {
                   <input
                     type="file"
                     accept="image/*"
-                    className="  w-full h-full   cursor-pointer"
+                    className="  w-full h-full cursor-pointer"
                     onChange={event => {
                       if (event.target.files && event.target.files.length > 0) {
                         setFieldValue("coverPhoto", event.target.files[0]);

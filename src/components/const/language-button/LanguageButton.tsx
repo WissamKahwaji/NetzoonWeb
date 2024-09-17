@@ -56,7 +56,7 @@ const LanguageButton = ({ className, title }: LanguageButtonProps) => {
         )}
       </button>
       {isOpen && (
-        <div className="bg-primary absolute text-white w-full top-9 md:top-8 rounded-lg flex flex-col items-center  p-1  ">
+        <div className="bg-primary absolute text-white w-full z-50 top-9 md:top-8 rounded-lg flex flex-col items-center  p-1  ">
           {langList.map((lang, index) => (
             <div
               key={index}

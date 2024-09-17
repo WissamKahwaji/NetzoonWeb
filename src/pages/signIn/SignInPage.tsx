@@ -47,6 +47,11 @@ const SignInPage = () => {
   };
 
   useEffect(() => {
+    if (window.location.hash === "#_=_") {
+      history.replaceState
+        ? history.replaceState(null, "", window.location.href.split("#")[0])
+        : (window.location.hash = "");
+    }
     const params = new URLSearchParams(window.location.search);
     const token = params.get("token");
     const userName = params.get("username");

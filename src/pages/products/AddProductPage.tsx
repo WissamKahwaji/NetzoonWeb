@@ -559,7 +559,7 @@ const AddProductPage = () => {
                 </div>
                 <div>
                   <label className="block mb-2 text-sm font-medium text-gray-700">
-                    {t("product_image")}
+                    {t("product_image")} (required)
                   </label>
                   <div className="flex flex-row w-full items-center gap-x-2">
                     <img

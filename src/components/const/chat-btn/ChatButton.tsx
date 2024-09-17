@@ -3,12 +3,15 @@ import { useSendbirdStateContext } from "@sendbird/uikit-react";
 import "@sendbird/uikit-react/dist/index.css";
 import { useAuth } from "../../../context/AuthContext";
 import { toast } from "react-toastify";
+import { useTranslation } from "react-i18next";
 
 type ChatButtonProps = {
   userId: string;
   otherPersonId: string;
   coverUrl: string;
   onCreateChannel: (url: string) => void;
+  text: string;
+  className?: string;
 };
 
 const ChatButton = ({
@@ -16,6 +19,8 @@ const ChatButton = ({
   otherPersonId: otherPersonId,
   coverUrl,
   onCreateChannel,
+  text,
+  className = "py-2 w-32 h-fit bg-primary text-white rounded-full justify-center items-center",
 }: ChatButtonProps) => {
   const useCreateChannel = (
     userId: string,
@@ -51,6 +56,7 @@ const ChatButton = ({
       }
     };
   };
+  const { t } = useTranslation();
   const onStartChat = useCreateChannel(
     userId,
     otherPersonId,
@@ -58,11 +64,8 @@ const ChatButton = ({
     onCreateChannel
   );
   return (
-    <button
-      onClick={onStartChat}
-      className="py-2 w-32 h-fit bg-primary text-white rounded-full justify-center items-center"
-    >
-      {"Chat"}
+    <button onClick={onStartChat} className={` ${className}`}>
+      {t(text)}
     </button>
   );
 };

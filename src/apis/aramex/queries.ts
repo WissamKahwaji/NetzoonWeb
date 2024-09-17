@@ -53,7 +53,7 @@ const useCreatePickUpWithShipmentMutation = () => {
       if (data.HasErrors === false) {
         toast.success("create pickup successfully");
 
-        navigate(`/`);
+        navigate(`/my-account/my-orders`);
       } else {
         toast.error("error, contact with support");
         navigate(`/`);

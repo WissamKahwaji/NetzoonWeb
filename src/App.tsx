@@ -28,12 +28,14 @@ function App() {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [pathname]);
-  const APP_ID = import.meta.env.SEND_BIRD_APP_ID;
 
   if (isError) return <div>Error !!!</div>;
   if (isLoading) return <LoadingComponent />;
   return (
-    <SendbirdProvider appId={APP_ID} userId={userChat ?? ""}>
+    <SendbirdProvider
+      appId={`D27C6110-9DB9-4EBE-AA85-CF39E2AF562E`}
+      userId={userChat ?? ""}
+    >
       <div>
         <Navbar
           profileImage={userInfo?.profilePhoto}
@@ -41,7 +43,7 @@ function App() {
           departmentsInfo={departmentsInfo}
         />
 
-        <main className=" mt-[130px] sm:mt-[53px] md:mt-[56px] lg:mt-[66px] xl:mt-[114px]">
+        <main className=" mt-[130px] sm:mt-[53px] md:mt-[190px] lg:mt-[114px] xl:mt-[114px]">
           <Outlet />
         </main>
 

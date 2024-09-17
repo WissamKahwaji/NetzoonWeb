@@ -133,7 +133,8 @@ const EditProfilePage = () => {
                   <img
                     src={profilePicture}
                     alt="Profile"
-                    className="rounded-full border border-primary shadow-sm shadow-secondary w-32 h-32 object-cover"
+                    crossOrigin="anonymous"
+                    className="rounded-full border border-primary shadow-sm shadow-secondary w-32 h-32 object-contain"
                   />
                   <button
                     type="button"

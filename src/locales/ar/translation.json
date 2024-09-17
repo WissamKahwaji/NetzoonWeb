@@ -361,6 +361,10 @@
     "rate_this_user":"قم بتقييم هذا المستخدم",
     "rate_this_product":"قم بتقييم هذا المنتج",
     "rate_this_service":"قم بتقييم هذا الخدمة",
-    "chat_hint": "يمكنك البدء بالدردشة و القيام بمكالمات الصوت والفيديو مع الشركات والمستخدمين المسجلين لدى تطبيق نت زوون "
+    "chat_hint": "يمكنك البدء بالدردشة و القيام بمكالمات الصوت والفيديو مع الشركات والمستخدمين المسجلين لدى تطبيق نت زوون ",
+    "edit_product":"تعديل المنتج",
+    "please_enter_your_address_details_in_english_language_according_to_delivery_policy":"يرجى إدخال تفاصيل عنوانك باللغة الإنجليزية وفقًا لسياسة التسليم",
+    "please_enter_your_address_in_english_language_according_to_delivery_policy" : "يرجى إدخال عنوانك باللغة الإنجليزية وفقًا لسياسة التسليم",
+    "user_type":"نوع المستخدم"
 
 }

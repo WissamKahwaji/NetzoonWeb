@@ -86,6 +86,7 @@ const MyLocalCompanyProfile = ({ userInfo }: MyLocalCompanyProfileProps) => {
     {
       text: "chat",
       icon: <IoChatboxEllipsesOutline className="text-white text-lg" />,
+      to: "/chat",
     },
     {
       text: "orders",
@@ -181,7 +182,7 @@ const MyLocalCompanyProfile = ({ userInfo }: MyLocalCompanyProfileProps) => {
               } flex justify-center items-center w-full h-full md:mr-16  cursor-pointer`}
               onClick={() => handleTabClick(tab)}
             >
-              <p className="text-[7px] md:text-sm ">{t(label)}</p>
+              <p className="text-xs md:text-sm ">{t(label)}</p>
             </div>
           ))}
         </div>

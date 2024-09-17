@@ -362,6 +362,10 @@
     "rate_this_user":"Rate this user",
     "rate_this_product":"Rate this product",
     "rate_this_service":"Rate this service",
-    "chat_hint":"You can start chatting and making voice and video calls with companies and users registered with the netzoon application."
+    "chat_hint":"You can start chatting and making voice and video calls with companies and users registered with the netzoon application.",
+    "edit_product":"Edit your product",
+    "please_enter_your_address_details_in_english_language_according_to_delivery_policy":"Please enter your address details in English language according to delivery policy",
+    "please_enter_your_address_in_english_language_according_to_delivery_policy":"Please enter your address details in English language according to delivery policy",
+    "user_type":"User type"
 
 }

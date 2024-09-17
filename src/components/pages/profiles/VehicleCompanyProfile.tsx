@@ -155,6 +155,7 @@ const VehicleCompanyProfile = ({
             otherPersonId={userInfo.username}
             onCreateChannel={handleCreateChannel}
             coverUrl={userInfo.profilePhoto ?? ""}
+            text="chat"
           />
           <button className="py-2 w-32 h-fit bg-primary text-white rounded-full justify-center items-center">
             {t("live_auction")}
@@ -171,7 +172,7 @@ const VehicleCompanyProfile = ({
               } flex justify-center items-center w-full h-full md:mr-16  cursor-pointer`}
               onClick={() => handleTabClick(tab)}
             >
-              <p className="text-[7px] md:text-sm ">{t(label)}</p>
+              <p className="text-xs md:text-sm ">{t(label)}</p>
             </div>
           ))}
         </div>

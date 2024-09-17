@@ -31,7 +31,7 @@ const ServiceContainer = () => {
             servicesCategories.slice(0, 8).map((category, index) => (
               <Link key={index} to={`/services/${category._id}`}>
                 <div className="px-3 py-3 border w-full h-12 rounded-md flex justify-center items-center border-primary bg-white  cursor-pointer   hover:scale-105 transform ease-in-out duration-300">
-                  <p className="text-[9px] text-center font-header font-semibold text-primary">
+                  <p className="text-[9px] md:text-base text-center font-header font-semibold text-primary">
                     {selectedLang === "en"
                       ? category.title
                       : category.titleAr ?? category.title}

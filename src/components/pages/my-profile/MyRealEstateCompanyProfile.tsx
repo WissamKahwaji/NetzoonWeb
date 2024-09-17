@@ -63,6 +63,7 @@ const MyRealEstateCompanyProfile = ({
     {
       text: "chat",
       icon: <IoChatboxEllipsesOutline className="text-white text-lg" />,
+      to: "/chat",
     },
     {
       text: "edit_profile",
@@ -137,7 +138,7 @@ const MyRealEstateCompanyProfile = ({
               } flex justify-center items-center w-full h-full md:mr-16  cursor-pointer`}
               onClick={() => handleTabClick(tab)}
             >
-              <p className="text-[7px] md:text-sm ">{t(label)}</p>
+              <p className="text-xs md:text-sm ">{t(label)}</p>
             </div>
           ))}
         </div>
