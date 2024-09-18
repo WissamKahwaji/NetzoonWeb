@@ -14,6 +14,7 @@ import {
   addToSelectedProducts,
   addVisitor,
   changeAccount,
+  deleteUserAccount,
   editUser,
   forgetPassword,
   getUserAccounts,
@@ -389,6 +390,25 @@ const useRateUserMutation = () => {
   });
 };
 
+const useDeleteUserAccountMutation = () => {
+  const navigate = useNavigate();
+  const { logout } = useAuth();
+  return useMutation({
+    mutationKey: ["delete-user-account"],
+    mutationFn: (userId: string) => {
+      return deleteUserAccount(userId);
+    },
+    onSuccess() {
+      toast.success(`delete user successfully.`);
+      logout();
+      navigate("/", { replace: true });
+    },
+    onError() {
+      toast.error(`failed to delete user`);
+    },
+  });
+};
+
 export {
   useSignInMutation,
   useGetUserByIdQuery,
@@ -412,4 +432,5 @@ export {
   useCompleteUserMutation,
   useAddVisitorMutation,
   useRateUserMutation,
+  useDeleteUserAccountMutation,
 };

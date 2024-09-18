@@ -371,6 +371,8 @@
     "add_netzoon_account":"إضافة حساب نت زوون",
     "please_enter_the_username_and_password_of_the_account_to_be_added":"يرجى إدخال اسم المستخدم وكلمة المرور للحساب المراد إضافته",
     "username":"اسم المستخدم",
-    "add_account":"إضافة الحساب"
+    "add_account":"إضافة الحساب",
+    "delete_my_account":"حذف حسابي",
+    "delete_my_account_warning":"هل أنت متأكد من انك تريد حذف حسابك ؟"
 
 }

@@ -112,6 +112,7 @@ const USER = {
   RESET_PASSWORD: (token: string) => `user/reset-password/${token}`,
   ADD_VISITOR: (userId: string) => `user/${userId}/addvisitor`,
   RATE_USER: (id: string) => `user/${id}/rate`,
+  DELETE: (userId: string) => `/user/delete-user/${userId}`,
 };
 
 const ARAMEX = {

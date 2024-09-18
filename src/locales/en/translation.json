@@ -372,6 +372,8 @@
     "add_netzoon_account":"Add netzoon account",
     "please_enter_the_username_and_password_of_the_account_to_be_added":"Please enter the username and password of the account to be added",
     "username":"Username",
-    "add_account":"Add account"
+    "add_account":"Add account",
+    "delete_my_account":"Delete my account",
+    "delete_my_account_warning":"Are you sure you want to delete your account ?"
 
 }

@@ -76,7 +76,7 @@ const CompleteProfilePage = () => {
     deliveryCarsNum: userInfo?.deliveryCarsNum,
     deliveryMotorsNum: userInfo?.deliveryMotorsNum,
     netzoonBalance: userInfo?.netzoonBalance,
-    city: userInfo?.city,
+    city: userInfo?.city ?? "Abadilah",
     addressDetails: userInfo?.addressDetails,
     contactName: userInfo?.contactName,
     floorNum: userInfo?.floorNum,

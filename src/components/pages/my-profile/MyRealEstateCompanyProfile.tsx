@@ -16,6 +16,7 @@ import {
 import Modal from "react-modal";
 import { IoIosArrowDown, IoMdAddCircle } from "react-icons/io";
 import LoadingComponent from "../loading/LoadingComponent";
+import { CgDetailsMore } from "react-icons/cg";
 
 interface MyRealEstateCompanyProfileProps {
   userInfo: UserModel;
@@ -110,6 +111,12 @@ const MyRealEstateCompanyProfile = ({
                 <CircleIconText key={index} text={icon.text} icon={icon.icon} />
               </Link>
             ))}
+            <Link to={`/more`}>
+              <CircleIconText
+                text={t("more")}
+                icon={<CgDetailsMore className="text-white text-lg" />}
+              />
+            </Link>
           </div>
         </div>
         <p className="text-gray-600 mt-2">{userInfo?.bio}</p>

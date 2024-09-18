@@ -22,6 +22,7 @@ import Modal from "react-modal";
 import LoadingComponent from "../loading/LoadingComponent";
 import { IoClose } from "react-icons/io5";
 import { IoIosArrowDown, IoMdAddCircle } from "react-icons/io";
+import { CgDetailsMore } from "react-icons/cg";
 
 interface MyUserProfileProps {
   userInfo: UserModel;
@@ -100,6 +101,12 @@ const MyUserProfile = ({ userInfo }: MyUserProfileProps) => {
                 <CircleIconText key={index} text={icon.text} icon={icon.icon} />
               </Link>
             ))}
+            <Link to={`/more`}>
+              <CircleIconText
+                text={t("more")}
+                icon={<CgDetailsMore className="text-white text-lg" />}
+              />
+            </Link>
           </div>
         </div>
         <div className="mt-5 w-full flex flex-row justify-center items-center gap-x-8 md:gap-x-16 capitalize">

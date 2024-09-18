@@ -118,9 +118,7 @@ const SignUpPage = () => {
     contactName: "",
     floorNum: 0,
     locationType: "home",
-    // ...(title && {
-    //   title: title,
-    // }),
+    title: "مواد بناء",
   };
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -184,7 +182,7 @@ const SignUpPage = () => {
                   {t(USER_TYPE.CAR)}
                 </option>
                 <option value={USER_TYPE.PLANES} className="text-xs">
-                  {USER_TYPE.PLANES}
+                  {t(USER_TYPE.PLANES)}
                 </option>
                 <option value={USER_TYPE.SEA_COMPANIES} className="text-xs">
                   {t(USER_TYPE.SEA_COMPANIES)}

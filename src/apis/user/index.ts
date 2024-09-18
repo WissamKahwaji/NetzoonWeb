@@ -179,6 +179,11 @@ const rateUser = async (paylaod: RateUserInputModel) => {
   return res.data;
 };
 
+const deleteUserAccount = async (userId: string) => {
+  const res = await publicInstance.delete(API_ROUTES.USER.DELETE(userId));
+  return res.data;
+};
+
 export {
   signIn,
   getUserByIdInfo,
@@ -201,4 +206,5 @@ export {
   resetPassword,
   addVisitor,
   rateUser,
+  deleteUserAccount,
 };
