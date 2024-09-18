@@ -28,6 +28,7 @@ const ChatButton = ({
     coverUrl: string,
     onCreateChannel: (url: string) => void
   ) => {
+    console.log(coverUrl);
     // To use the context, the component should be wrapped in the SendbirdProvider.
     const { stores } = useSendbirdStateContext(); // Access the Sendbird state context
     const sdk = stores.sdkStore.sdk; // Get the Sendbird SDK instance
@@ -44,8 +45,8 @@ const ChatButton = ({
         const params = {
           invitedUserIds: [userId, otherPersonId],
           isDistinct: true,
-          name: otherPersonId,
-          coverUrl: coverUrl,
+          // name: otherPersonId,
+          // coverUrl: coverUrl,
         };
 
         // In production, you should handle the error using try-catch
