@@ -48,9 +48,11 @@ const SignInPage = () => {
 
   useEffect(() => {
     if (window.location.hash === "#_=_") {
-      history.replaceState
-        ? history.replaceState(null, "", window.location.href.split("#")[0])
-        : (window.location.hash = "");
+      window.history.replaceState(
+        "",
+        document.title,
+        window.location.pathname + window.location.search
+      );
     }
     const params = new URLSearchParams(window.location.search);
     const token = params.get("token");
