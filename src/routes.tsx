@@ -249,26 +249,31 @@ const Routes = () => {
                 element={<AddAccountPage />}
               />
 
-              <Route path="more" element={<MorePage />} />
               <Route path="notifications" element={<NotificationsPage />} />
               <Route path="your-cart" element={<CartPage />} />
               <Route path="chat" element={<ChatPage />} />
+
+              <Route path="more/contacts" element={<ContactsPage />} />
+              <Route path="more/contacts/opinions" element={<OpinionsPage />} />
+              <Route
+                path="more/contacts/complaints"
+                element={<ComplaintsPage />}
+              />
+              <Route
+                path="more/contacts/question"
+                element={<QuestionsPage />}
+              />
+              <Route path="more/contacts/requests" element={<RequestsPage />} />
+              <Route
+                path="more/contacts/send-email"
+                element={<SendEmailPage />}
+              />
             </Route>
 
+            <Route path="more" element={<MorePage />} />
             <Route path="more/privacy-policy" element={<PrivacyPolicyPage />} />
             <Route path="more/terms-of-use" element={<TermsOfUsePage />} />
-            <Route path="more/contacts" element={<ContactsPage />} />
-            <Route path="more/contacts/opinions" element={<OpinionsPage />} />
-            <Route
-              path="more/contacts/complaints"
-              element={<ComplaintsPage />}
-            />
-            <Route path="more/contacts/question" element={<QuestionsPage />} />
-            <Route path="more/contacts/requests" element={<RequestsPage />} />
-            <Route
-              path="more/contacts/send-email"
-              element={<SendEmailPage />}
-            />
+
             <Route path="forget-password" element={<ForgetPasswordPage />} />
             <Route
               path="/reset-password/:token"

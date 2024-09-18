@@ -366,6 +366,12 @@
     "edit_product":"Edit your product",
     "please_enter_your_address_details_in_english_language_according_to_delivery_policy":"Please enter your address details in English language according to delivery policy",
     "please_enter_your_address_in_english_language_according_to_delivery_policy":"Please enter your address details in English language according to delivery policy",
-    "user_type":"User type"
+    "user_type":"User type",
+    "submit":"Submit",
+    "user_accounts":"User accounts",
+    "add_netzoon_account":"Add netzoon account",
+    "please_enter_the_username_and_password_of_the_account_to_be_added":"Please enter the username and password of the account to be added",
+    "username":"Username",
+    "add_account":"Add account"
 
 }

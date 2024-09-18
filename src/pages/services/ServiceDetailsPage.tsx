@@ -124,6 +124,7 @@ const ServiceDetailsPage = () => {
         <img
           src={serviceInfo?.imageUrl}
           alt=""
+          crossOrigin="anonymous"
           className="w-full h-full max-h-[350px] md:max-h-[350px] shadow-sm object-contain"
         />
       </div>
@@ -208,7 +209,7 @@ const ServiceDetailsPage = () => {
           </video>
         </div>
       )}
-      <div className=" fixed  bottom-0 w-full flex justify-center items-center py-3 bg-slate-100 flex-row gap-x-3 md:w-1/2 left-0 right-0 md:mx-auto">
+      <div className=" fixed  bottom-[64px] md:bottom-0 w-full flex justify-center items-center py-3 bg-slate-100 flex-row gap-x-3 md:w-1/2 left-0 right-0 md:mx-auto">
         <Link to={`tel:${serviceInfo?.whatsAppNumber}`}>
           <button className="px-2 py-2 text-white rounded-xl bg-primary  w-28">
             {t("call")}

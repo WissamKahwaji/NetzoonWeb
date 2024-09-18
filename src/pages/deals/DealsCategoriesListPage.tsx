@@ -21,7 +21,7 @@ const DealsCategoriesListPage = () => {
         <p className="font-body font-bold text-lg">{t("deals_categories")}</p>
         <FaArrowDown />
       </div>
-      <div className="w-full grid grid-cols-1 gap-x-2 gap-y-3 md:grid-cols-2 md:gap-4 md:w-1/2">
+      <div className="w-full grid grid-cols-1 gap-x-2 gap-y-3 md:grid-cols-2 md:gap-4 md:w-2/3">
         {dealsCategories &&
           dealsCategories.map((category, index) => (
             <Link to={`${category._id}`}>

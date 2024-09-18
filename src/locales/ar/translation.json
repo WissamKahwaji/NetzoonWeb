@@ -365,6 +365,12 @@
     "edit_product":"تعديل المنتج",
     "please_enter_your_address_details_in_english_language_according_to_delivery_policy":"يرجى إدخال تفاصيل عنوانك باللغة الإنجليزية وفقًا لسياسة التسليم",
     "please_enter_your_address_in_english_language_according_to_delivery_policy" : "يرجى إدخال عنوانك باللغة الإنجليزية وفقًا لسياسة التسليم",
-    "user_type":"نوع المستخدم"
+    "user_type":"نوع المستخدم",
+    "submit":"تأكيد",
+    "user_accounts":"حسابات المستخدم",
+    "add_netzoon_account":"إضافة حساب نت زوون",
+    "please_enter_the_username_and_password_of_the_account_to_be_added":"يرجى إدخال اسم المستخدم وكلمة المرور للحساب المراد إضافته",
+    "username":"اسم المستخدم",
+    "add_account":"إضافة الحساب"
 
 }

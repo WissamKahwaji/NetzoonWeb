@@ -81,6 +81,7 @@ const DealsDetailsPage = () => {
         <img
           src={dealInfo?.imgUrl}
           alt=""
+          crossOrigin="anonymous"
           className="w-full h-full shadow-sm object-contain"
         />
       </div>
